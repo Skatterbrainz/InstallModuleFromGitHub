@@ -1,14 +1,34 @@
 function Install-ModuleFromGitHub {
+    <#
+    .DESCRIPTION
+        Install module from GitHub source repo. Source can be referenced explicitly, or
+        by deriving from the ProjectURI of a published module (PS Gallery).
+    .PARAMETER GitHubRepo
+        URI to repo, or result of Find-Module (pipeline input)
+    .PARAMETER Branch
+        Name of branch. Default is 'master'
+    .PARAMETER ProjectUri
+        Explicit GitHub project URI path reference
+    .PARAMETER DestinationPath
+        Path where module contents will be downloaded
+    .PARAMETER SSOToken
+        Token to use for REST invocation if needed.
+    .PARAMETER moduleName
+        Name of module, if not derived from pipeline reference (GitHubRepo)
+    .PARAMETER Scope
+        Target scope is either AllUsers or CurrentUser. Default is AllUsers
+    .EXAMPLE
+        Find-Module PowerShellAI | Install-ModuleFromGitHub
+    #>
     [CmdletBinding()]
     param(
-        $GitHubRepo,
-        $Branch = "master",
-        [Parameter(ValueFromPipelineByPropertyName)]
-        $ProjectUri,
-        $DestinationPath,
+        [parameter()]$GitHubRepo,
+        [parameter()][string]$Branch = "master",
+        [Parameter(ValueFromPipelineByPropertyName)]$ProjectUri,
+        [parameter()][string]$DestinationPath,
         $SSOToken,
-        $moduleName,
-        $Scope
+        [parameter()][string]$moduleName,
+        [parameter()][string][ValidateSet('AllUsers','CurrentUser')]$Scope = 'AllUsers'
     )
 
     Process {
